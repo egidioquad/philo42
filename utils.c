@@ -18,3 +18,33 @@ void	kill_all(char *str, t_prog *prog, pthread_mutex_t *forks)
 	while(++i < prog->philos[0].number_of_philosophers)
 		pthread_mutex_destroy(&forks[i]);
 }
+
+size_t	get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "signora mi scusi che ore sono?\n", 32);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+void	print_message(char *mess, t_philo *philo)
+{
+	pthread_mutex_lock(philo->write_lock);
+	if (!stato_freddato(philo))
+		printf("%zu %d %s", get_current_time(), philo->philo_id, mess);
+	pthread_mutex_unlock(philo->write_lock);
+}
+
+
+int	stato_freddato(t_philo *philo)
+{
+	pthread_mutex_lock(philo->dead_lock);
+	if (philo->is_dead)
+	{
+		pthread_mutex_unlock(philo->dead_lock);
+		return(1);
+	}
+	pthread_mutex_unlock(philo->dead_lock);
+	return(0);
+}
