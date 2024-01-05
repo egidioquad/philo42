@@ -13,7 +13,7 @@
 #include "../philo.h"
 #include <stdio.h>
 
-int	ft_atoi2(char *str)
+int	ft_atoi(char *str)
 {
 	int		i;
 	long	result;
@@ -31,4 +31,14 @@ int	ft_atoi2(char *str)
 	if (result < -2147483648 || result > 2147483647)
 		exit(write(2, "Input valid args\n", 18) * 0);
 	return ((int) result);
+}
+
+int ft_strlen(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }

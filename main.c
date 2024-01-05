@@ -3,21 +3,24 @@
 void check_input(int argc, char **argv)
 {
 	int	i;
-	int x;
 
 	if (argc < 5 || argc > 6)
 	{
-		printf("Input valid arguments");
-		exit(2);
+		exit(write(2, "Invalid arguments\n", 19));
 	}
-	i = 0;
-
-	while (++i <= 5)
+	i = 0; //parte da argv 1
+	while (++i < 4)
 	{
-		x = ft_atoi2(argv[i]);
-		if (x == 0)
+		if (!ft_atoi(argv[i]))
 		{
-			exit(write(2, "Invalid input", 14));
+			exit(write(2, "Invalid input\n", 15));
+		}
+	}
+	if (argc == 6)
+	{
+		if (!ft_atoi(argv[5]))
+		{
+			exit(write(2, "Invalid input\n", 15));
 		}
 	}
 }
@@ -25,28 +28,25 @@ void check_input(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-	pthread_mutex_t	forks[ft_atoi2(argv[1])];
-	t_philo	philos[ft_atoi2(argv[1])];
-	t_prog		prog;
-
 	check_input(argc, argv);
-	init_prog(&prog, philos); //passing as a pointer address to modify the original structure
-	init_forks(forks, ft_atoi2(argv[1]));
-	create_thread(&prog, forks);
+	il_vero_main(argc, argv);
 	return (0);
 }
 
+int il_vero_main(int argc, char **argv)
+{
+	pthread_mutex_t	forks[ft_atoi(argv[1])];
+	t_philo	philos[ft_atoi(argv[1])];
+	t_prog		prog;
 
-/*
-// args  5 800 200 200 7
-		5 — The number of philosophers
-		800 — The time a philosopher will die if he doesn’t eat
-		200 — The time it takes a philosopher to eat
-		200 — The time it takes a philosopher to sleep
-		7 — Number of times all the philosophers need to eat before terminating the program **optional
+	//check_input(argc, argv);
+	init_prog(&prog, philos); //passing as a pointer address to modify the original structure
+	init_forks(forks, ft_atoi(argv[1]));
+	init_philos(philos, &prog, forks, argc, argv);
+	create_thread(&prog, forks);
+	kill_all("tHE eND", &prog, forks);
+	return (0);
+}
 
-
-
-
-
-	 */
+//./philo 5 800 200 200
+//./philo 5 800 200 200 7
