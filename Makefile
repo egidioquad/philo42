@@ -1,6 +1,6 @@
 NAME = philo
 
-SRC = init.c main.c manage_threads.c monitor_threads.c routine.c utils.c minilibft/ft_atoi.c
+SRC = init.c main.c manage_threads.c monitor_threads.c routine.c utils.c minilibft/minift.c
 OBJ = $(SRC:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror -lpthread -g 
