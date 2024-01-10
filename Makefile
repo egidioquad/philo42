@@ -11,7 +11,8 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
 	@gcc $(FLAGS) -o $(NAME) $(OBJ)
-
+	@rm -f $(OBJ)
+	
 %.o: %.c
 	@gcc $(FLAGS) -c $< -o $@
 

@@ -36,13 +36,9 @@ int main(int argc, char **argv)
 int il_vero_main(int argc, char **argv)
 {
 	pthread_mutex_t	forks[ft_atoi(argv[1])];
-	t_philo	philos[ft_atoi(argv[1])];
 	t_prog		prog;
 
-	//check_input(argc, argv);
-	init_prog(&prog, philos); //passing as a pointer address to modify the original structure
-	init_forks(forks, ft_atoi(argv[1]));
-	init_philos(philos, &prog, forks, argc, argv);
+	init_prog(&prog, forks, argc, argv);
 	create_thread(&prog, forks);
 	kill_all("tHE eND", &prog, forks);
 	return (0);
