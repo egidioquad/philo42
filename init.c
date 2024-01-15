@@ -43,7 +43,6 @@ t_philo	*init_philos(t_prog *prog, pthread_mutex_t *forks)
 		philos[x].is_eating = 0;
 		philos[x].is_dead = 0;
 	
-
 		philos[x].prog = prog;
 		philos[x].l_fork = &forks[x];
 		if (x == 0)

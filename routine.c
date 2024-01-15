@@ -27,8 +27,7 @@ void	*routine(void *pointer)
 
 void eat(t_philo *philo)
 {
-	if (pthread_mutex_lock(philo->r_fork) != 0)
-		print_message("\t\t\tLOCKED LOCKED\n", philo);
+	pthread_mutex_lock(philo->r_fork);
 	print_message("has taken a r fork\n", philo);
 
 	if (philo->prog->number_of_philosophers == 1)
@@ -42,26 +41,25 @@ void eat(t_philo *philo)
 	print_message("has taken a l fork\n", philo);
 
 
-	print_message("\t\tBEFORELOCK\n", philo);
-	pthread_mutex_lock(&philo->meal_lock);
 	philo->is_eating = 1;
 
-
-	philo->n_meals++;
-
+	print_message("is eating\n", philo);
+	//pthread_mutex_lock(&philo->meal_lock);
 
 	philo->last_meal = get_time();
-	philo->is_eating = 0;
-	pthread_mutex_unlock(&philo->meal_lock);
-	print_message("\t\tAFTER LOCK\n", philo);
 
-	
-	print_message("is eating\n", philo);
 	ft_sleep(philo->prog->time_to_eat);
 
 
-	pthread_mutex_unlock(philo->l_fork);
+	//pthread_mutex_unlock(&philo->meal_lock);
+
+	
+
 	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+
+	philo->n_meals++;
+	philo->is_eating = 0;
 }
 
 void dream(t_philo *philo)
