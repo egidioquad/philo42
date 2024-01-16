@@ -32,19 +32,12 @@ void	*monitor(void *pointer)
 //check se il filosofo è freddo
 int	check_freddo(t_philo *philo)
 {
-	//pthread_mutex_lock(&philo->meal_lock);
-	//size_t time_difference = get_time() - philo->last_meal;
-	//printf("last meal: %zu\n", time_difference);
-	if (get_time() - philo->last_meal >= philo->prog->time_to_die &&
+	if (get_time() > philo->last_meal && philo->prog->death &&
 		!philo->is_eating )
 	{
-	
-	//	pthread_mutex_unlock(&philo->meal_lock);
-
 		print_message("is dead\n", philo); 	
 		return(1);
 	}
-	//pthread_mutex_unlock(&philo->meal_lock);
 	return(0);
 }
 
@@ -52,14 +45,10 @@ int	check_overeat(t_philo *philo)
 {
 	if (philo->prog->number_of_times_each_philosopher_must_eat == -1)
 		return (0);
-	//pthread_mutex_lock(&philo->meal_lock);
 	if (philo->n_meals >= philo->prog->number_of_times_each_philosopher_must_eat)
 	{
 		print_message("ate too much and died\n", philo);
-	//	pthread_mutex_unlock(&philo->meal_lock);
 		return (1);
 	}
-	//pthread_mutex_unlock(&philo->meal_lock);
-
 	return (0);
 }

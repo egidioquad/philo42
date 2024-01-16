@@ -34,30 +34,29 @@ size_t	get_time(void)
 }
 
 void print_message(char *mess, t_philo *philo) {
-    pthread_mutex_lock(&philo->prog->write_lock);
-    if (!stato_freddato(philo)) {
-        printf("\t%zu %d ", get_time() - philo->prog->start_time, philo->philo_id);
+	size_t	start;
 
-        // Check if the message is " is dead" and print in red if true
-        if (strcmp(mess, "is dead\n") == 0) {
-            printf("\x1b[31m%s\x1b[0m", mess); // ANSI escape codes for red color
-        } else {
-            printf("%s", mess);
-        }
-    }
-    pthread_mutex_unlock(&philo->prog->write_lock);
+  pthread_mutex_lock(&philo->prog->write_lock);
+  if (!stato_freddato(philo)) {
+			start = get_time();
+      printf("%zu %d ", start - philo->prog->start_time, philo->philo_id);
+      // Check if the message is " is dead" and print in red if true
+      if (strcmp(mess, "is dead\n") == 0) {
+          printf("\x1b[31m%s\x1b[0m", mess); // ANSI escape codes for red color
+      } else {
+          printf("%s", mess);
+      }
+  }
+  pthread_mutex_unlock(&philo->prog->write_lock);
 }
 
 
 int	stato_freddato(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->prog->dead_lock);
-	if (philo->is_dead)
+	if (philo->last_meal < get_time())
 	{
-		pthread_mutex_unlock(&philo->prog->dead_lock);
 		return(1);
 	}
-	pthread_mutex_unlock(&philo->prog->dead_lock);
 	return(0);
 }
 
@@ -67,6 +66,6 @@ int	ft_sleep(size_t milli)
 
 	start = get_time();
 	while ((get_time() - start) < milli)
-		usleep(1); //aggiusta in base ad esigenza
+		usleep(1);
 	return (0);
 }

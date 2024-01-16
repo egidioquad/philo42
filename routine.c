@@ -1,13 +1,12 @@
 #include "philo.h"
 
-								//prog->philo
 void	*routine(void *pointer)
 {
 	t_philo *philo;
 
 	philo = (t_philo *)pointer;
 
-	philo->last_meal = get_time();
+	philo->last_meal = get_time() + philo->prog->time_to_die;
  	if (philo->philo_id % 2)
 		ft_sleep(philo->prog->time_to_eat - 1); 
 
@@ -20,7 +19,6 @@ void	*routine(void *pointer)
 		dream(philo);
 		think(philo);
 	}
-	print_message("returning\n", philo);
 	return(pointer);
 }
 
@@ -28,7 +26,7 @@ void	*routine(void *pointer)
 void eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->r_fork);
-	print_message("has taken a r fork\n", philo);
+	print_message("has taken a fork\n", philo);
 
 	if (philo->prog->number_of_philosophers == 1)
 	{
@@ -38,28 +36,22 @@ void eat(t_philo *philo)
 	}
 	
 	pthread_mutex_lock(philo->l_fork);
-	print_message("has taken a l fork\n", philo);
+	print_message("has taken a fork\n", philo);
 
 
 	philo->is_eating = 1;
 
 	print_message("is eating\n", philo);
-	//pthread_mutex_lock(&philo->meal_lock);
 
-	philo->last_meal = get_time();
-
-	ft_sleep(philo->prog->time_to_eat);
-
-
-	//pthread_mutex_unlock(&philo->meal_lock);
-
+	philo->last_meal = get_time() + philo->prog->time_to_die;
 	
+	ft_sleep(philo->prog->time_to_eat);
 
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
+	philo->is_eating = 0;
 
 	philo->n_meals++;
-	philo->is_eating = 0;
 }
 
 void dream(t_philo *philo)
